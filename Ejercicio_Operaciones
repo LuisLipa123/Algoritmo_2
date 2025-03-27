@@ -1,0 +1,183 @@
+import java.util.Scanner;
+// Interfaz Operable
+public interface Operable<E> {
+    E sumar(E otro);
+    E restar(E otro);
+    E multiplicar(E otro);
+    E dividir(E otro);
+    E potencia(E exponente);
+    E raizCuadrada();
+    E raizCubica();
+}
+
+// Clase OperacionesMatInteger
+public class OperacionesMatInteger implements Operable<Integer> {
+    private Integer valor;
+
+    public OperacionesMatInteger(Integer valor) {
+        this.valor = valor;
+    }
+
+    @Override
+    public Integer sumar(Integer otro) {
+        return valor + otro;
+    }
+
+    @Override
+    public Integer restar(Integer otro) {
+        return valor - otro;
+    }
+
+    @Override
+    public Integer multiplicar(Integer otro) {
+        return valor * otro;
+    }
+
+    @Override
+    public Integer dividir(Integer otro) {
+        if (otro == 0) throw new ArithmeticException("No es posible realizar la división por cero.");
+        return valor / otro;
+    }
+
+    @Override
+    public Integer potencia(Integer exponente) {
+        return (int) Math.pow(valor, exponente);
+    }
+
+    @Override
+    public Integer raizCuadrada() {
+        return (int) Math.sqrt(valor);
+    }
+
+    @Override
+    public Integer raizCubica() {
+        return (int) Math.cbrt(valor);
+    }
+}
+
+// Clase OperacionesMatDouble
+public class OperacionesMatDouble implements Operable<Double> {
+    private Double valor;
+
+    public OperacionesMatDouble(Double valor) {
+        this.valor = valor;
+    }
+
+    @Override
+    public Double sumar(Double otro) {
+        return valor + otro;
+    }
+
+    @Override
+    public Double restar(Double otro) {
+        return valor - otro;
+    }
+
+    @Override
+    public Double multiplicar(Double otro) {
+        return valor * otro;
+    }
+
+    @Override
+    public Double dividir(Double otro) {
+        if (otro == 0.0) throw new ArithmeticException("No es posible dividir entre cero.");
+        return valor / otro;
+    }
+
+    @Override
+    public Double potencia(Double exponente) {
+        return Math.pow(valor, exponente);
+    }
+
+    @Override
+    public Double raizCuadrada() {
+        return Math.sqrt(valor);
+    }
+
+    @Override
+    public Double raizCubica() {
+        return Math.cbrt(valor);
+    }
+}
+
+// Clase Principal
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int opcion;
+
+        do {
+            System.out.println("\nSelecciona una operación matemática:");
+            System.out.println("1. Sumar");
+            System.out.println("2. Restar");
+            System.out.println("3. Multiplicar");
+            System.out.println("4. Dividir");
+            System.out.println("5. Elevar a potencia");
+            System.out.println("6. Calcular raíz cuadrada");
+            System.out.println("7. Calcular raíz cúbica");
+            System.out.println("8. Terminar programa");
+            System.out.print("Introduce tu elección: ");
+            opcion = scanner.nextInt();
+
+            if (opcion >= 1 && opcion <= 7) {
+                System.out.print("Elige el tipo de número (1: Integer, 2: Double): ");
+                int tipo = scanner.nextInt();
+
+                if (tipo == 1) { // Integer
+                    System.out.print("Introduce el primer número entero: ");
+                    int num1 = scanner.nextInt();
+                    OperacionesMatInteger opInt = new OperacionesMatInteger(num1);
+
+                    if (opcion != 6 && opcion != 7) {
+                        System.out.print("Introduce el segundo número entero: ");
+                        int num2 = scanner.nextInt();
+                        ejecutarOperacion(opcion, opInt, num2);
+                    } else {
+                        ejecutarOperacion(opcion, opInt, null); // Solo un número
+                    }
+                } else if (tipo == 2) { // Double
+                    System.out.print("Introduce el primer número decimal: ");
+                    double num1 = scanner.nextDouble();
+                    OperacionesMatDouble opDouble = new OperacionesMatDouble(num1);
+
+                    if (opcion != 6 && opcion != 7) {
+                        System.out.print("Introduce el segundo número decimal: ");
+                        double num2 = scanner.nextDouble();
+                        ejecutarOperacion(opcion, opDouble, num2);
+                    } else {
+                        ejecutarOperacion(opcion, opDouble, null); // Solo un número
+                    }
+                } else {
+                    System.out.println("El tipo de número elegido no es válido.");
+                }
+            } else if (opcion != 8) {
+                System.out.println("La opción seleccionada no es válida.");
+            }
+        } while (opcion != 8);
+
+        System.out.println("El programa ha finalizado.");
+        scanner.close();
+    }
+
+    // Método para ejecutar las operaciones según la opción
+    private static <E> void ejecutarOperacion(int opcion, Operable<E> operacion, E valor) {
+        switch (opcion) {
+            case 1 -> System.out.println("Resultado de la suma: " + operacion.sumar(valor));
+            case 2 -> System.out.println("Resultado de la resta: " + operacion.restar(valor));
+            case 3 -> System.out.println("Resultado del producto: " + operacion.multiplicar(valor));
+            case 4 -> {
+                try {
+                    System.out.println("Resultado de la división: " + operacion.dividir(valor));
+                } catch (ArithmeticException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            case 5 -> System.out.println("Resultado de la potencia: " + operacion.potencia(valor));
+            case 6 -> System.out.println("Resultado de la raíz cuadrada: " + operacion.raizCuadrada());
+            case 7 -> System.out.println("Resultado de la raíz cúbica: " + operacion.raizCubica());
+            default -> System.out.println("Opción no válida.");
+        }
+    }
+}
