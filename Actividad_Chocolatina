@@ -1,0 +1,102 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+
+// Clase Bolsa que maneja una colección genérica de elementos.
+class Bolsa<T> implements Iterable<T> {
+    private ArrayList<T> lista = new ArrayList<>();
+    private int tope;
+
+    public Bolsa(int tope) {
+        this.tope = tope;
+    }
+
+    // Método que permite iterar sobre los elementos de la bolsa.
+    public Iterator<T> iterator() {
+        return lista.iterator();
+    }
+
+    // Método para añadir un objeto a la bolsa, respetando el límite.
+    public void add(T objeto) {
+        if (lista.size() < tope) {
+            lista.add(objeto);
+        } else {
+            throw new RuntimeException("No caben más elementos");
+        }
+    }
+}
+
+// Clase Chocolatina que contiene una marca.
+class Chocolatina {
+    private String marca;
+
+    public Chocolatina(String marca) {
+        this.marca = marca;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+}
+
+// Clase que contiene un método genérico para comparar arreglos de tipo Number.
+class DemoMetodoGenerico {
+    // Método para comparar dos arreglos de tipo Number.
+    static boolean igualArrays(Number[] x, Number[] y) {
+        if (x.length != y.length) {
+            return false;
+        }
+
+        for (int i = 0; i < x.length; i++) {
+            if (x[i].doubleValue() != y[i].doubleValue()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        Integer nums[] = {1, 2, 3, 4, 5};
+        Integer nums2[] = {1, 2, 3, 4, 5};
+        Integer nums3[] = {1, 2, 7, 4, 5};
+        Integer nums4[] = {1, 2, 7, 4, 5, 6};
+
+        // Comparar arreglos.
+        if (igualArrays(nums, nums2)) 
+            System.out.println("nums es igual a nums2");
+        if (igualArrays(nums, nums3)) 
+            System.out.println("nums es igual a nums3");
+        if (igualArrays(nums, nums4)) 
+            System.out.println("nums es igual a nums4");
+
+        // Comparación entre Integer y Double (comentado porque da error).
+        // Double dvals[] = {1.0, 2.0, 3.0, 4.0, 5.0};
+        // if (igualArrays(nums, dvals)) 
+        //     System.out.println("nums es igual a dvals");
+    }
+}
+
+// Clase principal donde se realiza la operación con la bolsa de chocolatinas.
+public class Main {
+    public static void main(String[] args) {
+        // Crear una bolsa que almacena chocolatinas.
+        Bolsa<Chocolatina> bolsaCho = new Bolsa<>(3);
+        Chocolatina c = new Chocolatina("Milka");
+        Chocolatina c1 = new Chocolatina("Milka");
+        Chocolatina c2 = new Chocolatina("Ferrero");
+
+        // Añadir chocolatinas a la bolsa.
+        bolsaCho.add(c);
+        bolsaCho.add(c1);
+        bolsaCho.add(c2);
+
+        // Imprimir las marcas de las chocolatinas almacenadas en la bolsa.
+        for (Chocolatina chocolatina : bolsaCho) {
+            System.out.println(chocolatina.getMarca());
+        }
+    }
+}
+
